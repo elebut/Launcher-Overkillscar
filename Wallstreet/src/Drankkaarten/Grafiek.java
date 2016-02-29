@@ -5,14 +5,12 @@
  */
 package Drankkaarten;
 
-import java.sql.DatabaseMetaData;
 import java.util.HashMap;
 import java.util.HashSet;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.chart.XYChart.Series;
 
 /**
  *
@@ -24,8 +22,8 @@ public class Grafiek {
     final BarChart<Number,String> bc;
     private HashMap<Integer,String> types;
     
-    public Grafiek(){
-        bc =  new BarChart<Number,String>(xAxis, yAxis);
+    public Grafiek(DataBeheer b){
+        bc =  new BarChart<>(xAxis, yAxis);
         bc.setTitle("Drankkaarten Per Vereniging");
         xAxis.setLabel("Aantal");  
         xAxis.setTickLabelRotation(90);
@@ -40,11 +38,10 @@ public class Grafiek {
         series1.getData().add(new XYChart.Data(20148.82, brazil));
         series1.getData().add(new XYChart.Data(10000, france));
         series1.getData().add(new XYChart.Data(35407.15, italy));
-        series1.getData().add(new XYChart.Data(12000, usa));    */  
-        DataBeheer b = new DataBeheer();
-        b.voegToe(new Vereniging("Ruiselede",0, 20));        
-        b.voegToe(new Vereniging("Tielt", 0, 4));
-        b.voegToe(new Vereniging("Tielt",1,5));
+        series1.getData().add(new XYChart.Data(12000, usa));    */ 
+        b.voegToe(new Vereniging("Ruiselede","Chiro", 20));        
+        b.voegToe(new Vereniging("Tielt", "Chiro", 4));
+        b.voegToe(new Vereniging("Tielt","KSA",5));
         init(b.getVerenigingen());
        
     }
@@ -57,17 +54,18 @@ public class Grafiek {
         }        
         bc.getData().add(s);
     } 
-    public void init(HashMap<Integer,HashSet<Vereniging>> lijst){
+    
+    public void init(HashMap<String,HashSet<Vereniging>> lijst){
         int grootte = lijst.size();
-        for(int i = 0; i<grootte;i++){
+        for(String s: lijst.keySet()){
             // For lus om van HashSet naar Array te gaan
-            Vereniging[] v = new Vereniging[lijst.get(i).size()];
+            Vereniging[] v = new Vereniging[lijst.get(s).size()];
             int j = 0;
-            for(Vereniging ver:lijst.get(i)){
+            for(Vereniging ver:lijst.get(s)){
                 v[j] = ver;
                 j++;
             }
-            addSeries(types.get(i),v);
+            addSeries(s,v);
         }
     }
     

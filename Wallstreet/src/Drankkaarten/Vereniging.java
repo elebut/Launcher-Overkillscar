@@ -13,25 +13,27 @@ import java.util.Objects;
  */
 public class Vereniging {
     private String naam;
-    private int type;
+    private String type;
     private int drankkaarten;
     
-    public Vereniging(String naam, int type, int drankkaarten){
+    
+    public Vereniging(String naam, String type, int drankkaarten){
         this.naam= naam;
         this.type = type;
         this.drankkaarten = drankkaarten;
     }
-    public Vereniging(String naam, int type){
+    public Vereniging(String naam, String type){
         this.naam= naam;
         this.type = type;
         this.drankkaarten = 0;
     }
+
     
     public String getNaam(){
         return naam;
     }
 
-    public int getType() {
+    public String getType() {
         return type;
     }
 
@@ -41,12 +43,14 @@ public class Vereniging {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 53 * hash + Objects.hashCode(this.naam);
-        hash = 53 * hash + this.type;
-        hash = 53 * hash + this.drankkaarten;
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.naam);
+        hash = 37 * hash + Objects.hashCode(this.type);
+        hash = 37 * hash + this.drankkaarten;
         return hash;
     }
+
+
 
     @Override
     public boolean equals(Object obj) {
