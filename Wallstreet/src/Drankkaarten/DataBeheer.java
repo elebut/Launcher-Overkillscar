@@ -5,6 +5,7 @@
  */
 package Drankkaarten;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -14,7 +15,7 @@ import java.util.HashSet;
  *
  * @author Ruben
  */
-public class DataBeheer {
+public class DataBeheer implements Serializable {
     private HashMap<String,HashSet<Vereniging>> verenigingen;
     private String[] types;
       

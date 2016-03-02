@@ -1,34 +1,46 @@
+package Drankkaarten;
 
-import Drankkaarten.DataBeheer;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
-import Drankkaarten.Grafiek;
-import Drankkaarten.Vereniging;
 import java.util.HashMap;
 import java.util.HashSet;
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 
 import javafx.event.EventHandler;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.VBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.HBox;
 
-public class Drankkaarten extends Application {
+public class Drankkaarten extends Application implements Serializable {
 DataBeheer b;
     @Override
-    public void start(Stage stage) {
-        b = new DataBeheer();
+    public void start(Stage stage) throws ClassNotFoundException {   
+        try{
+            FileInputStream fin = new FileInputStream(new File("data.dat"));
+            ObjectInputStream oin = new ObjectInputStream(fin);
+            b = (DataBeheer) oin.readObject();
+        }
+        catch(IOException  e){
+            b = new DataBeheer();
+        }
+        catch(ClassNotFoundException e){
+            b = new DataBeheer();
+        }
+        
+        
         FlowPane hb = new FlowPane();
         TextField naamVereniging = new TextField();
         naamVereniging.setText("Naam Vereniging");
@@ -57,7 +69,10 @@ DataBeheer b;
         addV.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent e) {
                 b.voegToe(new Vereniging(naamVereniging.getText(),b.getTypes()[soortenVereniging.getSelectionModel().getSelectedIndex()],Integer.parseInt(aantalDrankkaarten.getText())));
-                data.setText(b.getLijstString());}
+                data.setText(b.getLijstString());
+                serializeData();
+            }
+                
         });
       
         
@@ -94,6 +109,17 @@ DataBeheer b;
         pc.setId("Drankkaarten");
         pc.setTitle("Drankkaarten");
         return pc;
+    }
+    
+    public void serializeData(){
+        try{FileOutputStream fout = new FileOutputStream(new File("Data.dat")); 
+        ObjectOutputStream oout = new ObjectOutputStream(fout);
+        oout.writeObject(b);
+        }
+        catch(Exception e){
+            System.out.println("FOUT!");
+        }
+        
     }
 
     public static void main(String[] args) {
